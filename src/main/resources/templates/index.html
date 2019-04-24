@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+
+
+website url : <input type="text" id="url" value="https://www.babylonhealth.com"><br>
+depth: <input type="text" id="depth" value="3"><br>
+<input type="button" onclick="hello();" value="Submit" id="submit">
+<div id="fill"></div>
+<div id="loading" style="display:none">
+<img id="loading-image" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/fancybox_loading.gif" alt="Loading..." />
+</div>
+
+<table>
+    <tbody id="tbody"></tbody>
+</table>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script th:inline="javascript">
+
+function hello(){
+ var obj;
+ $("#tbody").empty();
+    document.getElementById('submit').disabled=true;
+    document.getElementById('loading').style.display = "block";
+    $.get({
+  url: [[ @{/processurls} ]]+"?url="+document.getElementById('url').value+"&depth="+document.getElementById('depth').value
+}).then(function(result) {
+     obj=  result;
+     var tbody = document.getElementById('tbody');
+
+for (var j in obj) {
+    var tr = "<tr>";
+    tr += "<td><a href=" + j + ">"+ j + "</a></td>" ;
+    tbody.innerHTML += tr;
+}
+document.getElementById('submit').disabled=false;
+ document.getElementById('loading').style.display = "none";
+ clearInterval(refreshIntervalId);
+ a();
+  });
+
+var refreshIntervalId = setInterval(a, 500);
+
+function a(){
+
+ $.get({
+  url: [[ @{/urlcount} ]]
+}).then(function(result) {
+  $('#fill').text("urls processed: " + result);
+  });
+}
+
+}
+
+</script>
+</body>
+</html>
