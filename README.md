@@ -11,4 +11,4 @@ open localhost:8080
 
 enter url and depth to get the urls
 
-Depth is the parameter that allow we want to crawl
+As we increase depth, we want crawl much deeper
